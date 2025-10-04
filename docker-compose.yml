@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: iex_lombok
+      POSTGRES_USER: iex_user
+      POSTGRES_PASSWORD: iex_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - iex_network
+
+  # Flask Backend
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://iex_user:iex_password@db:5432/iex_lombok
+      - SECRET_KEY=dev-secret-key
+      - JWT_SECRET_KEY=jwt-secret-key
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      - db
+    networks:
+      - iex_network
+    command: python run.py
+
+  # React Frontend
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    networks:
+      - iex_network
+    command: npm start
+
+  # Redis (for caching and sessions)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - iex_network
+
+volumes:
+  postgres_data:
+
+networks:
+  iex_network:
+    driver: bridge
