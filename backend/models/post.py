@@ -13,9 +13,9 @@ class Post(db.Model):
     
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
-    
+
+    # Convert post object to dictionary for JSON serialisation
     def to_dict(self):
-        """Convert post object to dictionary for JSON serialization"""
         return {
             'id': self.id,
             'title': self.title,

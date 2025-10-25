@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-Database initialization script for IEx Lombok
+Database initialisation script for IEx Lombok
 """
 from app import create_app
 from extensions import db
 from models import User, Post, Sighting
 
 def init_db():
-    """Initialize the database with tables"""
     app = create_app()
     
     with app.app_context():

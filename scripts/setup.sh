@@ -34,7 +34,7 @@ docker-compose up --build -d
 echo "Waiting for database to be ready..."
 sleep 10
 
-# Initialize database
+# Initialise database
 echo "Initializing database..."
 docker-compose exec backend python init_db.py
 

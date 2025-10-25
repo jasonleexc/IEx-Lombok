@@ -1,6 +1,7 @@
 from datetime import datetime
 from extensions import db
 
+# TODO: amend based on data required
 class Sighting(db.Model):
     __tablename__ = 'sightings'
     
@@ -15,17 +16,18 @@ class Sighting(db.Model):
     is_verified = db.Column(db.Boolean, default=False, nullable=False)
     sighting_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    
+
+    """ TODO: work on image recognition in later versions
     # Computer vision analysis results
     ai_species_prediction = db.Column(db.String(50), nullable=True)
     ai_confidence = db.Column(db.Float, nullable=True)
     analysis_metadata = db.Column(db.JSON, nullable=True)  # Store additional AI analysis data
-    
+    """"
     def __repr__(self):
         return f"Sighting('{self.species}', '{self.location}', '{self.sighting_date}')"
-    
+
+    # Convert sighting object ot dictionary for JSON serialisation
     def to_dict(self):
-        """Convert sighting object to dictionary for JSON serialization"""
         return {
             'id': self.id,
             'species': self.species,
@@ -39,7 +41,9 @@ class Sighting(db.Model):
             'sighting_date': self.sighting_date.isoformat(),
             'user_id': self.user_id,
             'reporter': self.reporter.username if self.reporter else None,
+            """ TODO: add in later on once image recognition software is up
             'ai_species_prediction': self.ai_species_prediction,
             'ai_confidence': self.ai_confidence,
             'analysis_metadata': self.analysis_metadata
+            """
         }
