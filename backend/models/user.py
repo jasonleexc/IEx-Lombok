@@ -19,21 +19,21 @@ class User(db.Model):
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
-    
+
+    # Hash and set user's password
     def set_password(self, password):
-        """Hash and set the user's password"""
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-    
+
+    # Check if the provided password matches user's password
     def check_password(self, password):
-        """Check if the provided password matches the user's password"""
         return bcrypt.check_password_hash(self.password_hash, password)
-    
+
+    # Generate JWT token for user
     def generate_token(self):
-        """Generate JWT token for the user"""
         return create_access_token(identity=self.id)
-    
+
+    # Convert user object to dictionary for JSON serialisation
     def to_dict(self):
-        """Convert user object to dictionary for JSON serialization"""
         return {
             'id': self.id,
             'username': self.username,

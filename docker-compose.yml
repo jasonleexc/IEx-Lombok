@@ -4,6 +4,7 @@ services:
   # PostgreSQL Database
   db:
     image: postgres:15-alpine
+    # For environment variables
     environment:
       POSTGRES_DB: iex_lombok
       POSTGRES_USER: iex_user

@@ -8,8 +8,8 @@ def create_app(config_class=Config):
     
     # Enable CORS for React frontend
     CORS(app, origins=['http://localhost:3000'])
-    
-    # Initialize extensions
+
+    # Initialise extensions
     from extensions import db, migrate, bcrypt, jwt
     db.init_app(app)
     migrate.init_app(app, db)

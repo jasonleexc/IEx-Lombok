@@ -6,9 +6,9 @@ from models.user import User
 
 posts_bp = Blueprint('posts', __name__)
 
+# Get all published posts
 @posts_bp.route('/', methods=['GET'])
 def get_posts():
-    """Get all published posts"""
     try:
         page = request.args.get('page', 1, type=int)
         per_page = request.args.get('per_page', 10, type=int)
@@ -27,9 +27,9 @@ def get_posts():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Get a specific post by ID
 @posts_bp.route('/<int:post_id>', methods=['GET'])
 def get_post(post_id):
-    """Get a specific post by ID"""
     try:
         post = Post.query.get_or_404(post_id)
         
@@ -41,10 +41,10 @@ def get_post(post_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Create a new post
 @posts_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_post():
-    """Create a new post"""
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
@@ -70,17 +70,17 @@ def create_post():
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+# Update a post by ID
 @posts_bp.route('/<int:post_id>', methods=['PUT'])
 @jwt_required()
 def update_post(post_id):
-    """Update a post"""
     try:
         user_id = get_jwt_identity()
         post = Post.query.get_or_404(post_id)
         
         # Check if user owns the post
         if post.user_id != user_id:
-            return jsonify({'error': 'Not authorized to update this post'}), 403
+            return jsonify({'error': 'Not authorised to update this post'}), 403
         
         data = request.get_json()
         
@@ -100,17 +100,17 @@ def update_post(post_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
 
+# Delete a post by ID
 @posts_bp.route('/<int:post_id>', methods=['DELETE'])
 @jwt_required()
 def delete_post(post_id):
-    """Delete a post"""
     try:
         user_id = get_jwt_identity()
         post = Post.query.get_or_404(post_id)
         
         # Check if user owns the post
         if post.user_id != user_id:
-            return jsonify({'error': 'Not authorized to delete this post'}), 403
+            return jsonify({'error': 'Not authorised to delete this post'}), 403
         
         db.session.delete(post)
         db.session.commit()
