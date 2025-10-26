@@ -19,7 +19,7 @@ def create_app(config_class=Config):
     # Register blueprints
     from routes.auth import auth_bp
     from routes.posts import posts_bp
-    from routes.computer_vision import cv_bp
+    from routes.computer_vision import cv_bps
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(posts_bp, url_prefix='/api/posts')

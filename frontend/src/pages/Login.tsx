@@ -1,27 +1,87 @@
-import React, { useState } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
+import AuthContext from '../context/AuthProvider';
 
-const Login: React.FC = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-    remember: false
-  });
+import axios from '../api/axios';
+import { isAxiosError } from 'axios';
+const LOGIN_URL = '/auth';
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
+const Login = () => {
+  const auth = useContext(AuthContext);
+  const userRef = useRef<HTMLInputElement | null>(null);
+  const errRef = useRef<HTMLParagraphElement | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [user, setUser] = useState('');
+  const [pwd, setPwd] = useState('');
+  const [errMsg, setErrMsg] = useState('');
+  const [success, setSuccess] = useState(false); 
+  
+  useEffect(() => {
+    userRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [user, pwd]);
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    console.log('Login attempt:', formData);
-  };
+
+    try {
+      const response = await axios.post(LOGIN_URL, 
+        JSON.stringify({ user, pwd }), 
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        }
+      );
+      const accessToken = response?.data?.accessToken;
+      const roles = response?.data?.roles;
+      auth?.setAuth({ user, pwd, roles, accessToken})
+      setUser('');
+      setPwd('');
+      setSuccess(true);
+    } catch (err) {
+      if (isAxiosError(err)) {
+        if (!err.response) {
+          setErrMsg('No Server Response');
+        } else if (err.response.status === 400) {
+          setErrMsg('Missing Username or Password');
+        } else if (err.response.status === 401) {
+          setErrMsg('Unauthorized');
+        } else {
+          setErrMsg('Login Failed');
+        }
+      } else {
+        // non-Axios error
+        setErrMsg('Login Failed');
+      }
+      errRef.current?.focus();
+    }
+  }
 
   return (
+    <>
+      {success ? (
+
+        <section className="min-h-screen flex items-center justify-center bg-green-50 py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-md w-full space-y-8">
+            <div className="bg-white p-8 rounded-lg shadow">
+              <h1 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Success!</h1>
+              <p className="mt-2 text-center text-sm text-gray-600">You have successfully logged in.</p>
+
+              <div className="mt-6">
+                <a
+                  href="/Home"
+                  className="group relative w-full inline-flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                >
+                  Go to Home
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
@@ -35,6 +95,11 @@ const Login: React.FC = () => {
             </a>
           </p>
         </div>
+
+         <p ref={errRef} className={errMsg ? "errsg" : "offscreen"} aria-live="assertive">
+          {errMsg}
+        </p>
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -45,11 +110,13 @@ const Login: React.FC = () => {
                 id="username"
                 name="username"
                 type="text"
+                ref={userRef}
+                autoComplete="off"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Username"
-                value={formData.username}
-                onChange={handleChange}
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
               />
             </div>
             <div>
@@ -63,32 +130,16 @@ const Login: React.FC = () => {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
+                value={pwd}
+                onChange={(e) => setPwd(e.target.value)}
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember"
-                name="remember"
-                type="checkbox"
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                checked={formData.remember}
-                onChange={handleChange}
-              />
-              <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                Forgot your password?
-              </a>
-            </div>
+          <div className="text-sm">
+            <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
+              Forgot your password?
+            </a>
           </div>
 
           <div>
@@ -101,8 +152,11 @@ const Login: React.FC = () => {
           </div>
         </form>
       </div>
-    </div>
+    </div> 
+    )}
+  </>
   );
+
 };
 
 export default Login;
