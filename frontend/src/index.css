@@ -15,3 +15,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.errsg {
+  display: block;
+  background-color: #ff757a;    /* light red background */
+  border: 1px solid #000000;    /* red border */
+  color: #7f1d1d;               /* dark red text */
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;      /* rounded */
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+/* visually hidden but accessible to screen readers */
+.offscreen {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; /* prevent line breaks */
+  border: 0; padding: 0; margin: -1px;
+}
