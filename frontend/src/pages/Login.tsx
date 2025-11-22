@@ -40,6 +40,7 @@ const Login = () => {
       setUser('');
       setPwd('');
       setSuccess(true);
+      // error handling
     } catch (err) {
       if (isAxiosError(err)) {
         if (!err.response) {
