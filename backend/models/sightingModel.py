@@ -5,12 +5,12 @@ from extensions import db
 class Sighting(db.Model):
     __tablename__ = 'sightings'
     
-    id = db.Column(db.Integer, primary_key=True)
+    sightingID = db.Column(db.Integer, primary_key=True)
     species = db.Column(db.String(50), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
     sighting_date = db.Column(db.DateTime, nullable=False, default=datetime.now(datetime.timezone.utc))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    userID = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # TODO: work on image recognition in later versions
     # Computer vision analysis results
@@ -21,7 +21,7 @@ class Sighting(db.Model):
     def __repr__(self):
         return f"Sighting('{self.species}', '{self.location}', '{self.sighting_date}')"
 
-    # Convert sighting object ot dictionary for JSON serialisation
+    # Convert sighting object to dictionary for JSON serialisation
     def to_dict(self):
         return {
             'id': self.id,
