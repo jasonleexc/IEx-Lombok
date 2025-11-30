@@ -2,6 +2,8 @@ from flask import Flask
 from flask_cors import CORS
 from config import Config
 
+app = Flask(__name__)
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -18,15 +20,14 @@ def create_app(config_class=Config):
     
     # Register blueprints
     from routes.auth import auth_bp
-    from routes.posts import posts_bp
-    from routes.computer_vision import cv_bps
+    from backend.routes.post_routes import posts_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(posts_bp, url_prefix='/api/posts')
-    app.register_blueprint(cv_bp, url_prefix='/api/cv')
     
     return app
 
 if __name__ == '__main__':
     app = create_app()
+    # only run in debug mode during development phase, turn to false once application is run
     app.run(debug=True, host='0.0.0.0', port=5000)

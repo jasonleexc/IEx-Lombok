@@ -2,7 +2,7 @@ from datetime import datetime
 from extensions import db, bcrypt
 from flask_jwt_extended import create_access_token
 
-class User(db.Model):
+class UserModel(db.Model):
     __tablename__ = 'users'
     
     id = db.Column(db.Integer, primary_key=True)
