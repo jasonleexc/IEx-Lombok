@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from extensions import db, bcrypt
 from flask_jwt_extended import create_access_token
 
@@ -10,7 +10,7 @@ class UserModel(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String(128), nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
     is_active = db.Column(db.Boolean, default=True, nullable=False)
     
     # Relationships

@@ -1,15 +1,15 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from extensions import db
 
 # TODO: amend based on data required
-class Sighting(db.Model):
+class SightingModel(db.Model):
     __tablename__ = 'sightings'
     
     sightingID = db.Column(db.Integer, primary_key=True)
     species = db.Column(db.String(50), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
-    sighting_date = db.Column(db.DateTime, nullable=False, default=datetime.now(datetime.timezone.utc))
+    sighting_date = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
     userID = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     # TODO: work on image recognition in later versions

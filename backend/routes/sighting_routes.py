@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from api import api, sightingFields, sighting_fields, db
-from models.sightingModel import Sighting
+from models.sightingModel import SightingModel
 from flask_restful import Resource, marshal_with, abort
 from repository.sightings_repository import addSightingToDB, deleteSightingFromDB
 

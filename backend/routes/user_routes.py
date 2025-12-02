@@ -5,7 +5,7 @@ from flask_restful import Resource, marshal_with, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import request, jsonify, Blueprint
 
-userBP = Blueprint('user_routes', __name__)
+userBP = Blueprint('user', __name__)
 
 # abstract returning to controller layer 
 class Users(Resource):

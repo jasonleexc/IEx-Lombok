@@ -4,7 +4,7 @@ from flask_restful import Api, reqparse, fields
 
 app = Flask(__name__)
 api = Api(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # change to postgres connection string 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:my_password@localhost:5432/turtledb' 
 db = SQLAlchemy(app)
 
 user_fields = reqparse.RequestParser()
