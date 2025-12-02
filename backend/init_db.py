@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-"""
-Database initialisation script for IEx Lombok
-"""
 from app import create_app
 from extensions import db
 from models import User, Post, Sighting

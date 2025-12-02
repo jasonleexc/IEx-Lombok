@@ -1,8 +1,8 @@
 from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from extensions import db
-from models.sighting import Sighting
-from models.user import User
+from backend.models.sightingModel import Sighting
+from backend.models.userModel import User
 import os
 import requests
 from werkzeug.utils import secure_filename
