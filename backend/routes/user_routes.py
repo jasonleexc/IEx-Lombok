@@ -1,4 +1,4 @@
-from api import userFields, db
+from api import userFields
 from backend.exceptions import NotFoundError, AlreadyExistsError, MissingFieldsError, InvalidFieldsError
 from flask_restful import marshal_with, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -77,7 +77,6 @@ def update_user_profile_route():
         }), 200
     
     except AlreadyExistsError as e:
-        db.session.rollback()
         abort(409, str(e))
     except NotFoundError as e:
         abort(404, str(e))

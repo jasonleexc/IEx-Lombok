@@ -15,6 +15,9 @@ def update_user_in_db(user, updates):
         setattr(user, key, value)
     db.session.commit()
     return user
+
+def rollback_db():
+    db.rollback()
     
 def delete_user_from_db(user):
     db.session.delete(user)

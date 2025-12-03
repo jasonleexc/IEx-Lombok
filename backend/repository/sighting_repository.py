@@ -19,6 +19,9 @@ def update_sighting_in_db(sighting, new_data):
         setattr(sighting, key, value)
     db.session.commit()
     return sighting
+
+def rollback_db():
+    db.rollback()
     
 def delete_sighting_from_db(sighting):
     db.session.delete(sighting)

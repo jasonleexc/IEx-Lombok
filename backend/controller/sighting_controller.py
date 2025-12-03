@@ -1,8 +1,6 @@
-from flask import Blueprint, jsonify
-from api import db
+from flask import Blueprint
 from backend.exceptions import NotFoundError
 from models.sightingModel import SightingModel
-from flask_restful import abort
 from backend.repository.sighting_repository import (add_sighting_to_db, 
                                              delete_sighting_from_db, 
                                              get_all_sightings, 
@@ -10,6 +8,11 @@ from backend.repository.sighting_repository import (add_sighting_to_db,
 
 
 sightingsBP = Blueprint('sightings', __name__)
+
+# TODO: measurements analytics functions
+# TODO: user-specific sightings functions e.g., a user should be able to get his own sightings, update user's sightings
+# TODO: implement image uploading functionality
+# TODO: use user authorisation checks from user_controller.py 
 
 def get_all_sightings():
     sightings = get_all_sightings()
@@ -31,6 +34,7 @@ def get_sighting(id):
         raise NotFoundError("Sighting not found")
     return sighting
 
+# TODO: include user authorisation checks 
 def update_sighting(id, data):
     args = data.parse_args()
     new_data = {

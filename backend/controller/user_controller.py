@@ -1,8 +1,6 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from backend.exceptions import AlreadyExistsError, InvalidFieldsError, MissingFieldsError, NotFoundError
-from api import db
 from models.userModel import UserModel
-from flask_restful import abort
 from repository.user_repository import (add_user_to_db, 
                                         delete_user_from_db, 
                                         get_user_by_id, 
@@ -73,7 +71,6 @@ def login_user(data):
         raise MissingFieldsError("Missing required fields")
 
     user = get_user_by_id(id)
-
     if user and user.check_password(args['password']):
         return user
     else:
@@ -86,3 +83,5 @@ def delete_user(id):
     delete_user_from_db(user)
 
 # TODO: abstract user validation logic into a separate function
+# TODO: implement more user functionality e.g., bio, profile picture, location (reference letterboxd)
+# TODO: implement user's personal list of sightings 

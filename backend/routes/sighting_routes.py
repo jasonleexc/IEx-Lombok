@@ -1,16 +1,17 @@
 from flask import Blueprint, jsonify
-from api import sightingFields, sighting_fields, db
+from api import sightingFields, sighting_fields
 from flask_restful import marshal_with, abort
 from backend.exceptions import NotFoundError
-from controller.sighting_controller import (
-    get_all_sightings,
-    add_sighting,
-    get_sighting,
-    delete_sighting,
-    update_sighting
-)
+from controller.sighting_controller import (get_all_sightings,
+                                            add_sighting,
+                                            get_sighting,
+                                            delete_sighting,
+                                            update_sighting
+                                        )
 
 # TODO: connect frontend to routes 
+# TODO: image uploading 
+# TODO: 
 
 sightingsBP = Blueprint('sightings', __name__)
 
