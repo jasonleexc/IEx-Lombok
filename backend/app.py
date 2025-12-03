@@ -29,5 +29,5 @@ def create_app(config_class=Config):
 
 if __name__ == '__main__':
     app = create_app()
-    # only run in debug mode during development phase, turn to false once application is run
+    # Only run in debug mode during development phase, turn to false once application is run
     app.run(debug=True, host='0.0.0.0', port=5001)
