@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from api import sightingFields, sighting_fields
 from flask_restful import marshal_with, abort
 from backend.exceptions import NotFoundError
@@ -11,7 +11,6 @@ from controller.sighting_controller import (get_all_sightings,
 
 # TODO: connect frontend to routes 
 # TODO: image uploading 
-# TODO: 
 
 sightingsBP = Blueprint('sightings', __name__)
 
@@ -24,8 +23,7 @@ def get_all_sightings_route():
 @marshal_with(sightingFields)
 @sightingsBP.route('/sightings', methods=['POST'])
 def add_sighting_route():
-    args = sighting_fields.parse_args()
-    data = {dataType: lineItem for dataType, lineItem in args.items()}
+    data = request.get_json()
     try:
         sighting = add_sighting(data)   
         return jsonify(sighting.to_dict()), 201 
@@ -44,10 +42,10 @@ def get_sighting_route(id):
 @marshal_with(sightingFields)
 @sightingsBP.route('/sightings/<int:id>', methods=['PUT'])
 def update_sighting_route(id):
-    args = sighting_fields.parse_args()
+    data = request.get_json()
     sighting = get_sighting(id)
     try:
-        updated_sighting = update_sighting(sighting, args)
+        updated_sighting = update_sighting(sighting, data)
 
         return jsonify({
             'message': 'Sighting updated successfully',

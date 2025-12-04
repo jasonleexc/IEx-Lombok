@@ -1,8 +1,8 @@
-import Sighting from "./Sighting";
-
 import React from "react";
+import Sighting from "./Sighting";
+import { SightingReturned } from "../types/sighting";
 
-const SightingsList: React.FC<({ sightings: Sighting[] })> = ({ sightings }) => {
+const SightingsList: React.FC<({ sightings: SightingReturned[] })> = ({ sightings }) => {
     return (
         <ul>
             {sightings.map((sighting) => (

@@ -1,60 +1,50 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import AuthContext from '../context/AuthProvider';
+import { useAuth } from '../context/AuthProvider';
 
-import axios from '../api/axios';
+import axios from '../utils/axios';
+import { useNavigate } from 'react-router-dom';
+import { loginRequest } from '../utils/auth.util';
 import { isAxiosError } from 'axios';
 const LOGIN_URL = '/auth';
 
-const Login = () => {
-  const auth = useContext(AuthContext);
+export const LoginPage: React.FC = () => {
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef<HTMLParagraphElement | null>(null);
 
-  const [user, setUser] = useState('');
-  const [pwd, setPwd] = useState('');
-  const [errMsg, setErrMsg] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [errorMsg, setErrorMsg] = useState(''); // to store error messages
+  const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false); 
-  
-  useEffect(() => {
-    userRef.current?.focus();
-  }, []);
 
-  useEffect(() => {
-    setErrMsg('');
-  }, [user, pwd]);
-
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleLogin = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+    setErrorMsg('');
+    setIsLoading(true);
 
     try {
-      const response = await axios.post(LOGIN_URL, 
-        JSON.stringify({ user, pwd }), 
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true
-        }
-      );
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
-      auth?.setAuth({ user, pwd, roles, accessToken})
-      setUser('');
-      setPwd('');
-      setSuccess(true);
+      const response = await loginRequest({ username: username, password, email})
+      localStorage.setItem('token', response.token);
+      setAuth({ token: response.token, user: response.user });
+      navigate('/Home');
       // error handling
-    } catch (err) {
+    } catch (err: any) {
       if (isAxiosError(err)) {
         if (!err.response) {
-          setErrMsg('No Server Response');
+          setErrorMsg('No Server Response');
         } else if (err.response.status === 400) {
-          setErrMsg('Missing Username or Password');
+          setErrorMsg('Missing Username or Password');
         } else if (err.response.status === 401) {
-          setErrMsg('Unauthorized');
+          setErrorMsg('Unauthorized');
         } else {
-          setErrMsg('Login Failed');
+          setErrorMsg('Login Failed');
         }
       } else {
         // non-Axios error
-        setErrMsg('Login Failed');
+        setErrorMsg('Login Failed');
       }
       errRef.current?.focus();
     }
@@ -81,7 +71,7 @@ const Login = () => {
             </div>
           </div>
         </section>
-      ) : (
+      ) : 
 
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -97,11 +87,11 @@ const Login = () => {
           </p>
         </div>
 
-         <p ref={errRef} className={errMsg ? "errsg" : "offscreen"} aria-live="assertive">
-          {errMsg}
+         <p ref={errRef} className={errorMsg ? "errsg" : "offscreen"} aria-live="assertive">
+          {errorMsg}
         </p>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="username" className="sr-only">
@@ -116,10 +106,31 @@ const Login = () => {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Username"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
+          </div>
+
+          <div className="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label htmlFor="email" className="sr-only">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="text"
+              ref={userRef}
+              autoComplete="off"
+              required
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
             <div>
               <label htmlFor="password" className="sr-only">
                 Password
@@ -131,8 +142,8 @@ const Login = () => {
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Password"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
@@ -154,10 +165,10 @@ const Login = () => {
         </form>
       </div>
     </div> 
-    )}
+    }
   </>
   );
 
 };
 
-export default Login;
+export default LoginPage;

@@ -1,26 +1,45 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
-
-type Auth = Record<string, unknown>;
+import React, { useEffect, createContext, useState, ReactNode } from "react";
+import { AuthUser } from "../types/user";
 
 type AuthContextType = {
-  auth: Auth;
-  setAuth: React.Dispatch<React.SetStateAction<Auth>>;
+  auth: AuthUser;
+  setAuth: React.Dispatch<React.SetStateAction<AuthUser>>;
+  logout: () => void;
 };
 
 const authContext = createContext<AuthContextType | undefined>(undefined);
 
-type AuthProviderProps = {
-  children: ReactNode;
+// TODO: check whether local storage is the best way 
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [auth, setAuth] = useState<AuthUser>({
+    token: localStorage.getItem("token"),
+    user: null,
+  });
+
+useEffect(() => {
+  if (auth.token) {
+    localStorage.setItem("token", auth.token);
+  } else {
+    localStorage.removeItem("token"); 
+  }
+}, [auth.token]);
+
+const logout = () => {
+  setAuth({ token: null, user: null });
 };
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [auth, setAuth] = useState<Auth>({});
-
   return (
-    <authContext.Provider value={{ auth, setAuth }}>
+    <authContext.Provider value={{ auth, setAuth, logout }}>
       {children}
     </authContext.Provider>
   );
 };
 
-export default authContext;
+export const useAuth = () => {
+  const context = React.useContext(authContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+
+  return context;
+};

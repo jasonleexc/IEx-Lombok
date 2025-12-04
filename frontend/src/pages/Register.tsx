@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { faCheck, faTimes, faInfoCircle, faPray } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from '../api/axios';
+import axios from '../utils/axios';
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

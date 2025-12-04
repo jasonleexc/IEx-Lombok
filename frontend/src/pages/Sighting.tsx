@@ -1,15 +1,7 @@
 import React from "react";
+import { SightingReturned } from "../types/sighting";
 
-type Sighting = {
-
-    id: number;
-    author: string;
-    title: string;
-    content: string;
-    datePosted: string;
-}
-
-const Sighting: React.FC<{ sighting: Sighting }> = ({ sighting }) => {
+const Sighting: React.FC<{ sighting: SightingReturned }> = ({ sighting }) => {
     return (
         <div className="mt-8">
             <div key={sighting.id} className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
