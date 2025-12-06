@@ -7,9 +7,6 @@ import SightingCard from "../components/SightingCard";
 import { createSightingRequest } from "../utils/sightings.util";
 import { useEffect } from "react";
 import api from "../utils/axios";
-// TODO: ensure that sightings are sent & fetched from backend
-
-// currently, backend is not able to run 
 
 export const Home = () => {
   const [ sightings, setSightings ] = useState<SightingReturned[]>([]);

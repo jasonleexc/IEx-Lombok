@@ -4,9 +4,7 @@ from extensions import db
 def init_db(app):
     
     with app.app_context():
-        from models import UserModel, SightingModel
-
-        # db.init_app(app)
+        from models import UserModel
         # Create all tables
         db.create_all()
         print("Database tables created successfully!")
@@ -21,8 +19,3 @@ def init_db(app):
             db.session.add(test_user)
             db.session.commit()
             print("Test user created: admin/admin123")
-
-if __name__ == '__main__':
-    from app import create_app
-    app = create_app()
-    init_db(app)
