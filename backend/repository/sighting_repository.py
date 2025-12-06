@@ -2,7 +2,7 @@ from extensions import db
 from models.sightingModel import SightingModel
 
 def get_all_sightings_from_db():
-    sightings = SightingModel.query.all()
+    sightings = SightingModel.query.order_by(SightingModel.sighting_date.desc()).all()
     return sightings
 
 def get_sighting_by_id(id):

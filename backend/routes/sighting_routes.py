@@ -14,12 +14,11 @@ from controller.sighting_controller import (get_all_sightings,
 sightingsBP = Blueprint('sightings', __name__)
 
 @sightingsBP.route('/', methods=['GET'])
-# @marshal_with(sightingFields)
 def get_all_sightings_route():
     sightings = get_all_sightings()
-    return sightings
+    # Convert each SightingModel to dict before returning
+    return jsonify([sighting.to_dict() for sighting in sightings])
 
-# @marshal_with(sightingFields)
 @sightingsBP.route('/', methods=['POST'])
 def add_sighting_route():
     data = request.get_json()
@@ -30,7 +29,6 @@ def add_sighting_route():
         return jsonify({'error': str(e)}), 500
 
 @sightingsBP.route('/<int:id>', methods=['GET'])
-# @marshal_with(sightingFields)
 def get_sighting_route(id):
     try:
         sighting = get_sighting(id)
@@ -38,7 +36,6 @@ def get_sighting_route(id):
     except NotFoundError as e:
         abort(404, str(e))
 
-# @marshal_with(sightingFields)
 @sightingsBP.route('/<int:id>', methods=['PUT'])
 def update_sighting_route(id):
     data = request.get_json()
@@ -53,11 +50,10 @@ def update_sighting_route(id):
     except NotFoundError as e:
         abort(404, str(e))
 
-# @marshal_with(sightingFields)
 @sightingsBP.route('/<int:id>', methods=['DELETE'])
 def delete_sighting_route(id):
     sighting = get_sighting(id)
     if not sighting:
         abort(404, "Post not found")
-    delete_sighting(sighting)
+    delete_sighting(id)
     return jsonify({'message': 'Sighting deleted successfully'}), 200

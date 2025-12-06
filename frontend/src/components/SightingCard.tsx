@@ -2,13 +2,13 @@ import { useState } from "react";
 import { SightingRequest } from "../types/sighting"
 
 
-type Props = {
+type SightingCardProps = {
     onSubmit: (payload: SightingRequest) => Promise<void> | void;
     onCancel: () => void;
     isSubmitting: boolean;
 }
 
-export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}: Props) {
+export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}: SightingCardProps) {
     const [author, setAuthor] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
