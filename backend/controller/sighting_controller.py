@@ -1,10 +1,13 @@
 from flask import Blueprint
-from backend.exceptions import NotFoundError
+from exceptions import NotFoundError
 from models.sightingModel import SightingModel
-from backend.repository.sighting_repository import (add_sighting_to_db, 
-                                             delete_sighting_from_db, 
-                                             get_all_sightings, 
-                                             get_sighting_by_id, update_sighting_in_db)
+from repository.sighting_repository import (
+    add_sighting_to_db,
+    delete_sighting_from_db,
+    get_all_sightings_from_db,
+    get_sighting_by_id,
+    update_sighting_in_db,
+)
 
 
 sightingsBP = Blueprint('sightings', __name__)
@@ -15,18 +18,30 @@ sightingsBP = Blueprint('sightings', __name__)
 # TODO: use user authorisation checks from user_controller.py 
 
 def get_all_sightings():
-    sightings = get_all_sightings()
+    sightings = get_all_sightings_from_db()
     return sightings
 
 def add_sighting(sighting_data):
-    args = sighting_data.parse_args()
+    data = sighting_data.parse_args() if hasattr(sighting_data, "parse_args") else (sighting_data or {})
+
+    title = data.get('title')
+    author = data.get('author')  
+    description = data.get('description')
+
+    if not title or not description:
+        raise ValueError("Missing required fields: title and description required")
+
+    author = data.get('author')
+    if author:
+        description = f"{description}\n\nAuthor: {author}"
+
     sighting = SightingModel(
-        species=args['species'], 
-        location=args['location'], 
-        description=args['description'], 
-        user_id=args['user_id'])
-    add_sighting_to_db(sighting)
-    return sighting
+        title=title,
+        author=author,
+        description=description,
+    )
+    created = add_sighting_to_db(sighting)
+    return created
 
 def get_sighting(id):
     sighting = get_sighting_by_id(id)
@@ -36,17 +51,23 @@ def get_sighting(id):
 
 # TODO: include user authorisation checks 
 def update_sighting(id, data):
-    args = data.parse_args()
-    new_data = {
-        'species': args['species'],
-        'location': args['location'],
-        'description': args['description']
-    }
+    payload = data.parse_args() if hasattr(data, "parse_args") else (data or {})
+
+    updates = {}
+    if 'title' in payload:
+        updates['title'] = payload.get('title')
+    if 'description' in payload:
+        updates['description'] = payload.get('description')
+
     sighting = get_sighting_by_id(id)
     if not sighting:
         raise NotFoundError("Sighting not found")
-    updated_sighting = update_sighting_in_db(sighting, new_data)
 
+    # if author provided and no user_id, append to description when not explicitly updating description
+    if payload.get('author') and 'description' not in updates and not sighting.user_id:
+        updates['description'] = (sighting.description or '') + f"\n\nAuthor: {payload.get('author')}"
+
+    updated_sighting = update_sighting_in_db(sighting, updates)
     return updated_sighting
 
 def delete_sighting(id):

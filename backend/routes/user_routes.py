@@ -1,10 +1,10 @@
 from api import userFields
-from backend.exceptions import NotFoundError, AlreadyExistsError, MissingFieldsError, InvalidFieldsError
+from exceptions import NotFoundError, AlreadyExistsError, MissingFieldsError, InvalidFieldsError
 from flask_restful import marshal_with, abort
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask import request, jsonify, Blueprint
 from controller.user_controller import (get_user, 
-                                        add_user,
+                                        register_user,
                                         update_user,
                                         login_user,
                                         delete_user)
@@ -28,7 +28,7 @@ def register_user_route():
     data = request.get_json()
         
     try:
-        user = add_user(data)
+        user = register_user(data)
         token = user.generate_token()
         return jsonify({
         'message': 'User created successfully',

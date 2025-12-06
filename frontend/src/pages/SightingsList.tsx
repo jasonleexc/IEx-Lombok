@@ -1,14 +1,20 @@
-import Sighting from "./Sighting";
-
 import React from "react";
+import Sighting from "./Sighting";
+import { SightingReturned } from "../types/sighting";
 
-const SightingsList: React.FC<({ sightings: Sighting[] })> = ({ sightings }) => {
+interface SightingsListProps {
+    sightings: SightingReturned[];
+    onDelete: (id: number) => Promise<void>;
+}
+
+const SightingsList: React.FC<SightingsListProps> = ({ sightings, onDelete }) => {
     return (
         <ul>
             {sightings.map((sighting) => (
                 <Sighting 
                     key={sighting.id}
-                    sighting = {sighting}
+                    sighting={sighting}
+                    onDelete={onDelete}
                 />
             ))}
         </ul>

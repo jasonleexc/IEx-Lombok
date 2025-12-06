@@ -11,11 +11,6 @@ class UserModel(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
-    is_active = db.Column(db.Boolean, default=True, nullable=False)
-    
-    # Relationships
-    posts = db.relationship('Post', backref='author', lazy='dynamic', cascade='all, delete-orphan')
-    sightings = db.relationship('Sighting', backref='reporter', lazy='dynamic', cascade='all, delete-orphan')
     
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
@@ -40,5 +35,4 @@ class UserModel(db.Model):
             'email': self.email,
             'image_file': self.image_file,
             'created_at': self.created_at.isoformat(),
-            'is_active': self.is_active
         }

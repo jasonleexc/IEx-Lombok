@@ -8,7 +8,7 @@ const Header = () => {
                     Welcome to Shell-utions
                 </h1>
                 <p className="text-lg text-gray-600 mb-8">
-                    by Jason, Dowon, Yu Tong, Ebelle & Shanti
+                    by Jason, Dean, Dowon, Yu Tong, Ebelle & Shanti
                 </p>
                 </div>
             </div>

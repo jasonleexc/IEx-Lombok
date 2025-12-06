@@ -2,21 +2,30 @@ from flask import Flask
 from flask_cors import CORS
 from config import Config
 
-app = Flask(__name__)
-
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    # Make URL routing flexible with or without trailing slashes
+    app.url_map.strict_slashes = False
     
     # Enable CORS for React frontend
-    CORS(app, origins=['http://localhost:3000'])
+    CORS(app, origins=['http://localhost:3000'],
+    methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allow_headers=['Content-Type', 'Authorization'], 
+    supports_credentials=True)
 
+    # db = SQLAlchemy()
     # Initialise extensions
     from extensions import db, migrate, bcrypt, jwt
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     jwt.init_app(app)
+
+    # Create database tables
+    from init_db import init_db
+    init_db(app)
     
     # Register blueprints
     from routes.user_routes import userBP
@@ -29,5 +38,5 @@ def create_app(config_class=Config):
 
 if __name__ == '__main__':
     app = create_app()
-    # Only run in debug mode during development phase, turn to false once application is run
+    # Only run in debug mode during development phase
     app.run(debug=True, host='0.0.0.0', port=5001)
