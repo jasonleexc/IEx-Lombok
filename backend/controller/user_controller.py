@@ -1,5 +1,5 @@
 from flask import Blueprint
-from backend.exceptions import AlreadyExistsError, InvalidFieldsError, MissingFieldsError, NotFoundError
+from exceptions import AlreadyExistsError, InvalidFieldsError, MissingFieldsError, NotFoundError
 from models.userModel import UserModel
 from repository.user_repository import (add_user_to_db, 
                                         delete_user_from_db, 

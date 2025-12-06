@@ -12,10 +12,6 @@ class UserModel(db.Model):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
     
-    # Relationships
-    posts = db.relationship('Post', backref='author', lazy='dynamic', cascade='all, delete-orphan')
-    sightings = db.relationship('Sighting', backref='reporter', lazy='dynamic', cascade='all, delete-orphan')
-    
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
 

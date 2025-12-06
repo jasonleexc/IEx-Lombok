@@ -11,12 +11,12 @@ type Props = {
 export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}: Props) {
     const [author, setAuthor] = useState("");
     const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
+    const [description, setDescription] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const payload: SightingRequest = {
-            author, title, content
+            author, title, description
         };
         await onSubmit(payload);
     }
@@ -55,8 +55,8 @@ export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}
                 </label>
                 <textarea
                     id="content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
                 />

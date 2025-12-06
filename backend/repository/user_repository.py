@@ -1,5 +1,5 @@
-from api import db
-from backend.models.userModel import UserModel
+from extensions import db
+from models.userModel import UserModel
     
 def get_user_by_id(id):
     user = UserModel.query.get(id)

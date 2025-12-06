@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request
-from api import sightingFields, sighting_fields
-from flask_restful import marshal_with, abort
-from backend.exceptions import NotFoundError
+from flask_restful import abort
+from exceptions import NotFoundError
 from controller.sighting_controller import (get_all_sightings,
                                             add_sighting,
                                             get_sighting,
@@ -14,14 +13,14 @@ from controller.sighting_controller import (get_all_sightings,
 
 sightingsBP = Blueprint('sightings', __name__)
 
-@sightingsBP.route('/sightings', methods=['GET'])
-@marshal_with(sightingFields)
+@sightingsBP.route('/', methods=['GET'])
+# @marshal_with(sightingFields)
 def get_all_sightings_route():
     sightings = get_all_sightings()
     return sightings
 
-@marshal_with(sightingFields)
-@sightingsBP.route('/sightings', methods=['POST'])
+# @marshal_with(sightingFields)
+@sightingsBP.route('/', methods=['POST'])
 def add_sighting_route():
     data = request.get_json()
     try:
@@ -30,8 +29,8 @@ def add_sighting_route():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@sightingsBP.route('/sightings/<int:id>', methods=['GET'])
-@marshal_with(sightingFields)
+@sightingsBP.route('/<int:id>', methods=['GET'])
+# @marshal_with(sightingFields)
 def get_sighting_route(id):
     try:
         sighting = get_sighting(id)
@@ -39,8 +38,8 @@ def get_sighting_route(id):
     except NotFoundError as e:
         abort(404, str(e))
 
-@marshal_with(sightingFields)
-@sightingsBP.route('/sightings/<int:id>', methods=['PUT'])
+# @marshal_with(sightingFields)
+@sightingsBP.route('/<int:id>', methods=['PUT'])
 def update_sighting_route(id):
     data = request.get_json()
     sighting = get_sighting(id)
@@ -54,8 +53,8 @@ def update_sighting_route(id):
     except NotFoundError as e:
         abort(404, str(e))
 
-@marshal_with(sightingFields)
-@sightingsBP.route('/sightings/<int:id>', methods=['DELETE'])
+# @marshal_with(sightingFields)
+@sightingsBP.route('/<int:id>', methods=['DELETE'])
 def delete_sighting_route(id):
     sighting = get_sighting(id)
     if not sighting:

@@ -9,7 +9,7 @@ const Sighting: React.FC<{ sighting: SightingReturned }> = ({ sighting }) => {
                 <h3 className="text-xl font-semibold text-gray-900">{sighting.title}</h3>
                 <span className="text-sm text-gray-500">{sighting.datePosted}</span>
                 </div>
-                <p className="text-gray-700 mb-2">{sighting.content}</p>
+                <p className="text-gray-700 mb-2">{sighting.description}</p>
                 <p className="text-sm text-gray-500">Posted by {sighting.author}</p>
             </div>
         </div> 

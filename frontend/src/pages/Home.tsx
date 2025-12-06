@@ -8,20 +8,22 @@ import { createSightingRequest } from "../utils/sightings.util";
 
 // TODO: ensure that sightings are sent & fetched from backend
 
+// currently, backend is not able to run 
+
 export const Home = () => {
   const [ sightings, setSightings ] = useState([
     {
       id: 1,
       author: 'jason lee',
       title: 'Hawksbill sighting!',
-      content: 'dummy data 1',
+      description: 'dummy data 1',
       datePosted: '21 July 2025'
     },
     {
       id: 2,
       author: 'justin lee',
       title: 'Green Turtle sighting!',
-      content: 'dummy data 2',
+      description: 'dummy data 2',
       datePosted: '22 July 2025'
     }
   ]);
@@ -35,7 +37,8 @@ export const Home = () => {
     try {
       setIsSubmitting(true);
       const saved = await createSightingRequest(payload);
-      setSightings([saved, ...sightings]);
+      setSightings(prev => [saved, ...prev]);
+      closeModal();
     } catch (error) {
       console.error("Error creating sighting: ", error);
     } finally {

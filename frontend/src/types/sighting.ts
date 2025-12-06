@@ -3,7 +3,7 @@
 export type SightingRequest = {
     author: string,
     title: string,
-    content: string,
+    description: string,
 }
 
 // Data returned by backend
@@ -11,7 +11,7 @@ export type SightingReturned = {
     id: number;
     author: string;
     title: string;
-    content: string;
+    description: string;
     datePosted: string;
 }
 

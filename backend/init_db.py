@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-from app import create_app
 from extensions import db
-from models import User, Post, Sighting
 
-def init_db():
-    app = create_app()
+def init_db(app):
     
     with app.app_context():
+        from models import UserModel, SightingModel
+
+        # db.init_app(app)
         # Create all tables
         db.create_all()
         print("Database tables created successfully!")
         
         # Create a test user if none exists
-        if not User.query.first():
-            test_user = User(
+        if not UserModel.query.first():
+            test_user = UserModel(
                 username='admin',
                 email='admin@iexlombok.com'
             )
@@ -23,4 +23,6 @@ def init_db():
             print("Test user created: admin/admin123")
 
 if __name__ == '__main__':
-    init_db()
+    from app import create_app
+    app = create_app()
+    init_db(app)

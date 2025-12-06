@@ -6,33 +6,26 @@ class SightingModel(db.Model):
     __tablename__ = 'sightings'
     
     sightingID = db.Column(db.Integer, primary_key=True)
-    species = db.Column(db.String(50), nullable=False)
-    location = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=True)
+    title = db.Column(db.String(100), nullable=False)
+    author = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
     sighting_date = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
-    userID = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    # foreign key to users table 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
 
     # TODO: work on image recognition in later versions
-    # Computer vision analysis results
-    # ai_species_prediction = db.Column(db.String(50), nullable=True)
-    # ai_confidence = db.Column(db.Float, nullable=True)
-    # analysis_metadata = db.Column(db.JSON, nullable=True)  # Store additional AI analysis data
 
     def __repr__(self):
-        return f"Sighting('{self.species}', '{self.location}', '{self.sighting_date}')"
+        return f"Sighting('{self.title}', '{self.author}', '{self.sighting_date}')"
 
     # Convert sighting object to dictionary for JSON serialisation
     def to_dict(self):
         return {
-            'id': self.id,
-            'species': self.species,
-            'location': self.location,
+            'id': self.sightingID,
+            'title': self.title,
+            'author': self.author,
             'description': self.description,
             'sighting_date': self.sighting_date.isoformat(),
             'user_id': self.user_id,
-            
-            # TODO: add in later on once image recognition software is up
-            # 'ai_species_prediction': self.ai_species_prediction,
-            # 'ai_confidence': self.ai_confidence,
-            # 'analysis_metadata': self.analysis_metadata
         }
