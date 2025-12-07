@@ -12,11 +12,12 @@ export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}
     const [author, setAuthor] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [date, setDate] = useState("");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const payload: SightingRequest = {
-            author, title, description
+            author, title, description, sighting_date: date
         };
         await onSubmit(payload);
     }
@@ -57,6 +58,19 @@ export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}
                     id="content"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    required
+                />
+            </div>
+            <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
+                    Date
+                </label>
+                <input
+                    id="date"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
                 />

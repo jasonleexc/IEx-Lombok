@@ -4,6 +4,7 @@ export type SightingRequest = {
     author: string,
     title: string,
     description: string,
+    sighting_date?: string, // Optional date in 'YYYY-MM-DD' format
 }
 
 // Data returned by backend
@@ -12,6 +13,6 @@ export type SightingReturned = {
     author: string;
     title: string;
     description: string;
-    datePosted: string;
+    sighting_date: string;
 }
 
