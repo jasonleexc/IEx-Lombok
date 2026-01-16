@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { User } from "../types/user"; 
+import { UserReturned } from "../types/user"; 
 
 type AuthContextType = {
-  user: User | null;
-  setUser: (u: User | null) => void;
+  user: UserReturned | null;
+  setUser: (u: UserReturned | null) => void;
   token: string | null;
   setToken: (t: string | null) => void;
 };
@@ -11,7 +11,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserReturned | null>(null);
   const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
 
   // keep localStorage in sync (simple)

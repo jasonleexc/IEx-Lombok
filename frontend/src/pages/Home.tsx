@@ -41,6 +41,7 @@ export const Home = () => {
       closeModal();
     } catch (error) {
       console.error("Error creating sighting: ", error);
+      alert("Failed to create sighting. ");
     } finally {
       setIsSubmitting(false);
       closeModal();
@@ -54,7 +55,7 @@ export const Home = () => {
       setSightings(prev => prev.filter(sighting => sighting.id !== id));
     } catch (error) {
       console.error("Error deleting sighting:", error);
-      alert("Failed to delete sighting");
+      alert("Failed to delete sighting. ");
     }
   };
 

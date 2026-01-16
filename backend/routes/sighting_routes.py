@@ -8,7 +8,6 @@ from controller.sighting_controller import (get_all_sightings,
                                             update_sighting
                                         )
 
-# TODO: connect frontend to routes 
 # TODO: image uploading 
 
 sightingsBP = Blueprint('sightings', __name__)

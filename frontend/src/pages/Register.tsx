@@ -64,20 +64,19 @@ const Register = () => {
     confirmPassword: ''
   });
 
- 
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
-      if (!v1 || !v2) {
+    if (!v1 || !v2) {
       setErrMsg("Invalid Entry");
       return;
     }
 
     try {
       const response = await axios.post(REGISTER_URL,
-        JSON.stringify({ user, pwd }),
+        { user, pwd },
         {
           headers: { 'Content-Type': 'application/json' },
           withCredentials: true

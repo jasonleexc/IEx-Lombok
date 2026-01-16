@@ -28,7 +28,7 @@ class ProductionConfig(Config):
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:' # amend this to use postgresql for testing environment 
     WTF_CSRF_ENABLED = False
 
 config = {

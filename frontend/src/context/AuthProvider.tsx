@@ -13,7 +13,7 @@ const authContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [auth, setAuth] = useState<AuthUser>({
     token: localStorage.getItem("token"),
-    user: null,
+    user: null
   });
 
 useEffect(() => {

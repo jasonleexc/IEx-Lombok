@@ -6,7 +6,7 @@ A full-stack web application for sea turtle tracking & documentation.
 
 ## About
 This platform enables users to:
-- Report sea turtle sightings with detailed information.
+- Report sea turtle sightings with detailed measurements for analysis & tracking.
 - View recent sightings from the community.
 
 ## Quick Start 
@@ -42,8 +42,6 @@ This platform enables users to:
 # Stop containers
 docker-compose down
 
-# Stop and remove all data (fresh start)
-docker-compose down -v
 ```
 
 ## User Guide
@@ -54,7 +52,7 @@ docker-compose down -v
 2. Fill in the sighting form:
    - **Author:** Your name
    - **Title:** Title of your post
-   - **Description:** Detailed observation (e.g., "Hawksbill Turtle sighted at Turtle Haven nearby Gili Trawangan.")
+   - **Description:** Observation with actions of turtle sighted (e.g., "Hawksbill Turtle sighted at Turtle Haven nearby Gili Trawangan.")
 3. Click **Submit**
 4. Your sighting appears at the top of the list
 
@@ -65,7 +63,7 @@ docker-compose down -v
 3. The sighting is immediately removed from the list
 
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 Web App/
@@ -103,7 +101,7 @@ Web App/
 └── README.md                  # This file
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - **React 18** with TypeScript
@@ -163,6 +161,7 @@ Web App/
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000
    - Database: localhost:5432
+   - To note, the application is yet to be deployed, so it can only still be run on your local machine
 
 ## Future Enhancements
 

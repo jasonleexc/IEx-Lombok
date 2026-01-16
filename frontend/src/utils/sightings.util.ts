@@ -2,8 +2,8 @@ import api from "./axios";
 
 import { SightingRequest, SightingReturned } from "../types/sighting";
 
+// function that sends all sighting info to backend 'routes'
 export async function createSightingRequest(payload: SightingRequest): Promise<SightingReturned> {
   const res = await api.post("/sightings", payload);
-  console.log("Created sighting: ", res.data);
   return res.data;
 }

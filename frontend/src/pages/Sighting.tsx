@@ -1,6 +1,8 @@
 import React from "react";
 import { SightingReturned } from "../types/sighting";
+import { UserReturned } from "../types/user";
 
+// TODO: only allow authenticated users to delete their own sightings 
 const Sighting: React.FC<{ sighting: SightingReturned; onDelete: (id: number) => Promise<void> }> = ({ sighting, onDelete }) => {
     return (
         <li className="bg-white shadow-md rounded-lg p-6 mb-4">
