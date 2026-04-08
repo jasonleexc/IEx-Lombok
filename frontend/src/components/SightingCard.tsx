@@ -1,97 +1,97 @@
+import { Heart, MessageCircle, MapPin, Calendar, Share2 } from "lucide-react";
 import { useState } from "react";
-import { SightingRequest } from "../types/sighting"
+import { Badge } from "@/components/ui/badge";
 
-
-type SightingCardProps = {
-    onSubmit: (payload: SightingRequest) => Promise<void> | void;
-    onCancel: () => void;
-    isSubmitting: boolean;
+interface SightingCardProps {
+  author: string;
+  avatar: string;
+  image: string;
+  species: string;
+  location: string;
+  date: string;
+  description: string;
+  likes: number;
+  comments: number;
+  size?: string;
+  behavior?: string;
 }
 
-export default function SightingForm({ onSubmit, onCancel, isSubmitting = false}: SightingCardProps) {
-    const [author, setAuthor] = useState("");
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [date, setDate] = useState("");
+const SightingCard = ({
+  author, avatar, image, species, location, date,
+  description, likes, comments, size, behavior,
+}: SightingCardProps) => {
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(likes);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const payload: SightingRequest = {
-            author, title, description, sighting_date: date
-        };
-        await onSubmit(payload);
-    }
+  const handleLike = () => {
+    setLiked(!liked);
+    setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+  };
 
-    return (
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="author">
-                    Author
-                </label>
-                <input
-                    id="author"
-                    type="text"
-                    value={author}
-                    onChange={(e) => setAuthor(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
-            </div>
-            <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-                    Title
-                </label>
-                <input
-                    id="title"
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
-            </div>
-            <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="content">
-                    Content
-                </label>
-                <textarea
-                    id="content"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
-            </div>
-            <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="date">
-                    Date
-                </label>
-                <input
-                    id="date"
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    required
-                />
-            </div>
-            <div className="mt-6 flex justify-end space-x-4">
-                <button
-                    type="button"
-                    onClick={onCancel}
-                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    disabled={isSubmitting}
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
-                </button>
-            </div>
-        </form>
-    );
-}
+  return (
+    <article className="bg-card rounded-lg border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex items-center gap-3 p-4">
+        <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-sm font-semibold text-primary">
+          {avatar}
+        </div>
+        <div>
+          <p className="font-semibold text-sm text-card-foreground">{author}</p>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Calendar className="h-3 w-3" />
+            <span>{date}</span>
+            <span>·</span>
+            <MapPin className="h-3 w-3" />
+            <span>{location}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <img src={image} alt={`${species} sighting`} className="w-full h-full object-cover" loading="lazy" />
+        <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground border-0">
+          {species}
+        </Badge>
+      </div>
+
+      <div className="p-4 space-y-3">
+        <p className="text-sm text-card-foreground leading-relaxed">{description}</p>
+
+        {(size || behavior) && (
+          <div className="flex flex-wrap gap-2">
+            {size && (
+              <span className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                📏 {size}
+              </span>
+            )}
+            {behavior && (
+              <span className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                🐢 {behavior}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="flex items-center gap-4 pt-2 border-t border-border">
+          <button
+            onClick={handleLike}
+            className={`flex items-center gap-1.5 text-sm transition-colors ${
+              liked ? "text-coral" : "text-muted-foreground hover:text-coral"
+            }`}
+          >
+            <Heart className={`h-4 w-4 ${liked ? "fill-current" : ""}`} />
+            <span>{likeCount}</span>
+          </button>
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors">
+            <MessageCircle className="h-4 w-4" />
+            <span>{comments}</span>
+          </button>
+          <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors ml-auto">
+            <Share2 className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export default SightingCard;
