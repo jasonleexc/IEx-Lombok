@@ -13,17 +13,14 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code into image
+# Copy application code
 COPY . .
 
 # Create uploads directory
 RUN mkdir -p uploads
 
-# Set port environment variable
-ENV PORT=5001
-
 # Expose port
-EXPOSE 5001
+EXPOSE 5000
 
 # Run the application
 CMD ["python", "run.py"]

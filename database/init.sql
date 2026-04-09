@@ -1,4 +1,4 @@
--- Initialise Sea Turtle Database
+-- Initialize IEx Lombok Database
 -- This script runs when the PostgreSQL container starts
 
 -- Create database if it doesn't exist

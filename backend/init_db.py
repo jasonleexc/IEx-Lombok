@@ -1,17 +1,23 @@
 #!/usr/bin/env python3
+"""
+Database initialization script for IEx Lombok
+"""
+from app import create_app
 from extensions import db
+from models import User, Post, Sighting
 
-def init_db(app):
+def init_db():
+    """Initialize the database with tables"""
+    app = create_app()
     
     with app.app_context():
-        from models import UserModel
         # Create all tables
         db.create_all()
         print("Database tables created successfully!")
         
         # Create a test user if none exists
-        if not UserModel.query.first():
-            test_user = UserModel(
+        if not User.query.first():
+            test_user = User(
                 username='admin',
                 email='admin@iexlombok.com'
             )
@@ -19,3 +25,6 @@ def init_db(app):
             db.session.add(test_user)
             db.session.commit()
             print("Test user created: admin/admin123")
+
+if __name__ == '__main__':
+    init_db()

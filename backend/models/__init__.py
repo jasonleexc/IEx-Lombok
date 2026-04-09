@@ -1,4 +1,5 @@
-from models.userModel import UserModel
-from models.sightingModel import SightingModel
+from .user import User
+from .post import Post
+from .sighting import Sighting
 
-__all__ = ['UserModel', 'SightingModel']
+__all__ = ['User', 'Post', 'Sighting']

@@ -9,7 +9,7 @@ class SightingModel(db.Model):
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    sighting_date = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    sighting_date = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
 
     # foreign key to users table 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
@@ -26,6 +26,6 @@ class SightingModel(db.Model):
             'title': self.title,
             'author': self.author,
             'description': self.description,
-            'sighting_date': self.sighting_date.isoformat(),
+            'sighting_date': self.sighting_date.strftime('%Y-%m-%d') if self.sighting_date else None,
             'user_id': self.user_id,
         }

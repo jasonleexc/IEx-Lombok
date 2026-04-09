@@ -1,8 +1,9 @@
+version: '3.8'
+
 services:
   # PostgreSQL Database
   db:
     image: postgres:15-alpine
-    # For environment variables
     environment:
       POSTGRES_DB: iex_lombok
       POSTGRES_USER: iex_user
@@ -19,7 +20,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - "5001:5001"
+      - "5000:5000"
     environment:
       - FLASK_ENV=development
       - DATABASE_URL=postgresql://iex_user:iex_password@db:5432/iex_lombok
@@ -43,7 +44,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - REACT_APP_API_URL=http://backend:5001
+      - REACT_APP_API_URL=http://localhost:5000
     networks:
       - iex_network
     command: npm start
