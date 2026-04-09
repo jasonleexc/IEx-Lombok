@@ -10,7 +10,7 @@ const values = [
   {
     icon: Users,
     title: "Community-Driven",
-    description: "Our global network of divers, snorkelers, beachgoers, and researchers work together to create the most comprehensive sea turtle database.",
+    description: "Through a network of divers, snorkelers, beachgoers, and researchers working together to create a comprehensive sea turtle database.",
   },
   {
     icon: Shield,
@@ -20,7 +20,7 @@ const values = [
   {
     icon: Heart,
     title: "Respect & Responsibility",
-    description: "We promote responsible wildlife interaction — observe from a distance, never disturb nesting turtles, and always report injuries.",
+    description: "We promote responsible wildlife interaction — observe from a distance and never disturb nesting turtles.",
   },
 ];
 
@@ -44,10 +44,10 @@ const About = () => {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-display text-3xl font-bold text-foreground mb-6">Our Mission</h2>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Shell-utions empowers everyday ocean lovers to contribute to sea turtle conservation, with a special focus 
-            on the waters around Lombok, Indonesia. By recording and sharing sightings, our community builds a living map 
-            of sea turtle activity — helping researchers identify critical habitats, track population trends, and respond 
-            to threats in real time. Whether you're a seasoned marine biologist or a first-time snorkeler, your observation matters.
+            Shell-utions empowers everyday ocean lovers to contribute to marine conservation, with a special focus 
+            on turtles in the waters around Lombok, Indonesia. By recording and sharing sightings, our community builds a living map 
+            of sea turtle activity — helping researchers identify critical habitats and track population trends. 
+            Whether you are a seasoned scuba diver or a first-time snorkeller, your observation matters.
           </p>
         </div>
       </section>
@@ -58,7 +58,7 @@ const About = () => {
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="font-display text-2xl font-bold text-foreground mb-4">Our Team</h2>
             <p className="text-muted-foreground mb-6">
-              Shell-utions is built with passion for marine conservation and a shared love of the ocean.
+              Shell-utions is built with passion for marine conservation and a shared love for the ocean.
             </p>
             <p className="font-display text-lg font-semibold text-primary">
               By Jason, Dean, Dowon, Yutong, Shanti & Ebelle

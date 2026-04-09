@@ -4,6 +4,103 @@ A full-stack web application for marine conservation and turtle sighting trackin
 
 ## Tech Stack
 
+## About
+This platform enables users to:
+- Report sea turtle sightings with detailed measurements for analysis & tracking.
+- View recent sightings from the community.
+
+## Quick Start 
+
+### Pre-requisites
+
+- **Docker Desktop** installed and running
+- **Git** for cloning the repository
+
+### Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone <IEx-Lombok>
+   cd "Y2S1 Materials/IEx Lombok/Web App"
+   ```
+
+2. **Start the application:**
+   ```bash
+   docker-compose up --build
+   ```
+   
+   This will:
+   - Build the frontend and backend containers
+   - Start PostgreSQL database & initialise database tables
+
+3. **Access the application:**
+   - **Frontend:** http://localhost:3000
+
+### Stopping the Application
+
+```bash
+# Stop containers
+docker-compose down
+
+```
+
+## User Guide
+
+### Logging a New Sighting
+
+1. Click **"Log New Sighting"** button on the home page
+2. Fill in the sighting form:
+   - **Author:** Your name
+   - **Title:** Title of your post
+   - **Description:** Observation with actions of turtle sighted (e.g., "Hawksbill Turtle sighted at Turtle Haven nearby Gili Trawangan.")
+3. Click **Submit**
+4. Your sighting appears at the top of the list
+
+### Deleting a Sighting
+
+1. Find the sighting you want to remove
+2. Click the red **"Delete"** button
+3. The sighting is immediately removed from the list
+
+
+## Project Structure
+
+```
+Web App/
+├── frontend/                   # React TypeScript frontend
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   │   └── SightingCard.tsx  # Form for creating sightings
+│   │   ├── pages/             # Page components
+│   │   │   ├── Home.tsx       # Main page with sighting list
+│   │   │   ├── Sighting.tsx   # Individual sighting card
+│   │   │   └── SightingsList.tsx  # List container
+│   │   ├── types/             # TypeScript type definitions
+│   │   ├── utils/             # API utilities and axios config
+│   │   └── App.tsx            # Root component
+│   └── package.json
+│
+├── backend/                    # Flask Python backend
+│   ├── models/                # Database models
+│   │   ├── userModel.py       # User schema
+│   │   └── sightingModel.py   # Sighting schema
+│   ├── routes/                # API endpoints
+│   │   ├── user_routes.py     # User CRUD routes
+│   │   └── sighting_routes.py # Sighting CRUD routes
+│   ├── controller/            # Business logic
+│   │   └── sighting_controller.py
+│   ├── repository/            # Database operations
+│   │   └── sighting_repository.py
+│   ├── extensions.py          # Flask extensions (db, jwt, bcrypt)
+│   ├── config.py              # App configuration
+│   ├── init_db.py             # Database initialization
+│   ├── app.py                 # Flask app factory
+│   └── requirements.txt
+│
+├── docker-compose.yml         # Docker services configuration
+└── README.md                  # This file
+```
+
 ### Frontend
 - **React 18** with TypeScript
 - **TailwindCSS** for styling
@@ -82,6 +179,7 @@ A full-stack web application for marine conservation and turtle sighting trackin
    - Frontend: http://localhost:3000
    - Backend API: http://localhost:5000
    - Database: localhost:5432
+   - To note, the application is yet to be deployed, so it can only still be run on your local machine
 
 ### Local Development (without Docker)
 
