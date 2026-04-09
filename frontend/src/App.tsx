@@ -14,10 +14,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// for route-based navigation between pages 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
+    <TooltipProvider> 
+      <Toaster /> // for toast notifications using sonner
       <Sonner />
       <BrowserRouter>
         <Layout>
