@@ -1,75 +1,53 @@
 import { Link } from "react-router-dom";
-import { Plus, TrendingUp, Users, Eye, MapPin } from "lucide-react";
+import { Plus, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SightingCard from "@/components/SightingCard";
 import heroImage from "@/assets/hero-turtle.jpg";
-import turtle1 from "@/assets/turtle-1.jpg";
-import turtle2 from "@/assets/turtle-2.jpg";
-import turtle3 from "@/assets/turtle-3.jpg";
-import turtle4 from "@/assets/turtle-4.jpg";
-
-const mockSightings = [
-  {
-    author: "Wayan Surya",
-    avatar: "WS",
-    image: turtle1,
-    species: "Hawksbill Turtle",
-    location: "Gili Trawangan, Lombok",
-    date: "April 5, 2026",
-    description: "Spotted this beautiful hawksbill feeding on sponges near the famous turtle point dive site! She was very calm and let us observe from about 4 meters. The reef here is thriving.",
-    likes: 142,
-    comments: 23,
-    size: "~70cm carapace",
-    behavior: "Feeding on sponges",
-  },
-  {
-    author: "Ayu Lestari",
-    avatar: "AL",
-    image: turtle3,
-    species: "Green Sea Turtle",
-    location: "Gili Meno, Lombok",
-    date: "April 3, 2026",
-    description: "Green turtle grazing on seagrass in the shallow waters of Gili Meno. This area is such an important feeding ground — we counted 4 turtles in just one snorkel session!",
-    likes: 189,
-    comments: 31,
-    size: "~90cm carapace",
-    behavior: "Grazing on seagrass",
-  },
-  {
-    author: "James Okafor",
-    avatar: "JO",
-    image: turtle2,
-    species: "Olive Ridley",
-    location: "Kuta Beach, South Lombok",
-    date: "March 30, 2026",
-    description: "Witnessed an arriving female at sunset during the nesting season on the pristine beaches of South Lombok. The local conservation team was monitoring the area. Truly humbling.",
-    likes: 231,
-    comments: 47,
-    size: "~65cm carapace",
-    behavior: "Nesting",
-  },
-  {
-    author: "Sophie Chen",
-    avatar: "SC",
-    image: turtle4,
-    species: "Green Turtle Hatchlings",
-    location: "Belongas Bay, Lombok",
-    date: "March 27, 2026",
-    description: "Magical hatchling release organized by the local turtle conservation center! Over 50 baby green turtles made their way to the ocean at dawn. The community effort here is incredible.",
-    likes: 412,
-    comments: 89,
-    size: "~5cm each",
-    behavior: "Hatching & ocean entry",
-  },
-];
-
-const stats = [
-  { icon: Eye, value: "12,847", label: "Total Sightings" },
-  { icon: Users, value: "3,291", label: "Contributors" },
-  { icon: MapPin, value: "Lombok", label: "Featured Region" },
-];
+import { dataService } from "@/services/dataService";
+import { useState, useEffect } from "react";
+import type { SightingMock, StatItem } from "@/services/dataService";
 
 const Index = () => {
+  const [sightings, setSightings] = useState<SightingMock[]>([]);
+  const [stats, setStats] = useState<StatItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [sightingsData, statsData] = await Promise.all([
+          dataService.getSightings(),
+          dataService.getStats()
+        ]);
+        setSightings(sightingsData);
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Create icon mapping for stats
+  const statsWithIcons = stats.map((stat, index) => ({
+    ...stat,
+    icon: index === 0 ? MapPin : index === 1 ? Plus : MapPin
+  }));
+
   return (
     <div>
       {/* Hero Section */}
@@ -113,7 +91,7 @@ const Index = () => {
       <section className="bg-card border-b border-border">
         <div className="container py-6">
           <div className="grid grid-cols-3 gap-4">
-            {stats.map((stat) => (
+            {statsWithIcons.map((stat, index) => (
               <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <stat.icon className="h-4 w-4 text-primary" />
@@ -142,8 +120,8 @@ const Index = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockSightings.map((sighting, i) => (
-            <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+          {sightings.map((sighting, i) => (
+            <div key={sighting.id} className="animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
               <SightingCard {...sighting} />
             </div>
           ))}

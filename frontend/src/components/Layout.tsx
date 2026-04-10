@@ -16,6 +16,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
+    // top nav-bar
     <div className="min-h-screen flex flex-col bg-background">
       <header className="sticky top-0 z-50 bg-ocean-deep/95 backdrop-blur-sm border-b border-primary/20">
         <div className="container flex items-center justify-between h-16">
@@ -95,7 +96,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div>
               <h4 className="font-display font-semibold text-primary-foreground mb-3">Stay Connected</h4>
               <p className="text-sm leading-relaxed">
-                Every sighting matters. Join thousands of ocean advocates helping protect sea turtles worldwide.
+                Every sighting matters. Join thousands of ocean advocates helping to protect sea turtles worldwide.
               </p>
             </div>
           </div>

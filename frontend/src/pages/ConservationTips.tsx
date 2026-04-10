@@ -1,59 +1,59 @@
-import { Eye, HandHeart, Lightbulb, ShieldAlert, Waves, Camera, TreePalm, Trash2 } from "lucide-react";
+import React from "react";
+import { dataService } from "@/services/dataService";
+import { useState, useEffect } from "react";
+import type { ConservationTipItem, EmergencyContact } from "@/services/dataService";
+import { Eye, HandHeart, Camera, Waves, Trash2, Lightbulb, TreePalm, ShieldAlert } from "lucide-react";
 
-const interactionGuidelines = [
-  {
-    icon: Eye,
-    title: "Observe from a Distance",
-    description: "Stay at least 3 meters (10 feet) away from sea turtles in the water. On land, maintain at least 6 meters (20 feet). Use binoculars or a zoom lens for a closer look.",
-  },
-  {
-    icon: HandHeart,
-    title: "Never Touch or Ride",
-    description: "Touching turtles can stress them, damage their shells, and transfer harmful bacteria in both directions. Never attempt to ride, grab, or restrict their movement.",
-  },
-  {
-    icon: Camera,
-    title: "Photography Tips",
-    description: "Turn off flash — it can disorient turtles, especially hatchlings. Approach slowly and let the turtle come to you. Never chase a swimming turtle for a photo.",
-  },
-  {
-    icon: Waves,
-    title: "Nesting Beach Behavior",
-    description: "Keep beaches dark at night during nesting season — no flashlights or phone screens. Don't walk on marked nests. If you see a nesting female, stay behind her and remain silent.",
-  },
-];
-
-const conservationActions = [
-  {
-    icon: Trash2,
-    title: "Reduce Plastic Pollution",
-    description: "Sea turtles mistake plastic bags for jellyfish. Use reusable bags, avoid single-use plastics, and participate in beach cleanups.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Support Light Management",
-    description: "Artificial lights near nesting beaches disorient hatchlings. Advocate for turtle-safe lighting in coastal communities.",
-  },
-  {
-    icon: TreePalm,
-    title: "Protect Coastal Habitats",
-    description: "Support mangrove restoration, seagrass conservation, and coral reef protection — these are critical sea turtle habitats.",
-  },
-  {
-    icon: ShieldAlert,
-    title: "Report Injured Turtles",
-    description: "If you find an injured, entangled, or stranded sea turtle, do not attempt to move it. Contact local wildlife authorities or marine rescue immediately.",
-  },
-];
-
-const emergencyContacts = [
-  { region: "United States", contact: "FWC: 1-888-404-FWCC (3922)" },
-  { region: "Australia", contact: "1300 ANIMAL (264625)" },
-  { region: "Caribbean", contact: "WIDECAST Network — widecast.org" },
-  { region: "Mediterranean", contact: "MEDASSET — medasset.org" },
-];
+// Icon mapping for conservation tips
+const iconMap: Record<string, any> = {
+  Eye,
+  HandHeart,
+  Camera,
+  Waves,
+  Trash2,
+  Lightbulb,
+  TreePalm,
+  ShieldAlert
+};
 
 const ConservationTips = () => {
+  const [tips, setTips] = useState<{ interaction_guidelines: ConservationTipItem[], conservation_actions: ConservationTipItem[] }>({
+    interaction_guidelines: [],
+    conservation_actions: []
+  });
+  const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [tipsData, contactsData] = await Promise.all([
+          dataService.getConservationTips(),
+          dataService.getEmergencyContacts()
+        ]);
+        setTips(tipsData);
+        setEmergencyContacts(contactsData);
+      } catch (error) {
+        console.error('Error loading conservation data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading conservation tips...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container py-10">
       <div className="max-w-3xl mb-12">
@@ -68,10 +68,10 @@ const ConservationTips = () => {
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">How to Interact Responsibly</h2>
         <p className="text-muted-foreground mb-8">Follow these guidelines to ensure your encounters are safe for both you and the turtles.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {interactionGuidelines.map((item) => (
+          {tips.interaction_guidelines.map((item) => (
             <div key={item.title} className="bg-card rounded-lg border border-border p-6 flex gap-4">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <item.icon className="h-5 w-5 text-primary" />
+                {iconMap[item.icon] ? React.createElement(iconMap[item.icon], { className: "h-5 w-5 text-primary" }) : <div className="h-5 w-5 text-primary" />}
               </div>
               <div>
                 <h3 className="font-display font-semibold text-foreground mb-1">{item.title}</h3>
@@ -87,10 +87,10 @@ const ConservationTips = () => {
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">How You Can Help</h2>
         <p className="text-muted-foreground mb-8">Everyday actions that make a real difference for sea turtle survival.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {conservationActions.map((item) => (
+          {tips.conservation_actions.map((item) => (
             <div key={item.title} className="bg-card rounded-lg border border-border p-6 flex gap-4">
               <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <item.icon className="h-5 w-5 text-accent" />
+                {iconMap[item.icon] ? React.createElement(iconMap[item.icon], { className: "h-5 w-5 text-accent" }) : <div className="h-5 w-5 text-accent" />}
               </div>
               <div>
                 <h3 className="font-display font-semibold text-foreground mb-1">{item.title}</h3>

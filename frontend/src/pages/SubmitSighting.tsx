@@ -115,7 +115,7 @@ const SubmitSighting = () => {
           )}
         </div>
 
-        {/* Species */}
+        {/* Species (remove later on once ML functionality is implemented)*/} 
         <div>
           <Label className="text-sm font-semibold mb-2 block">Species</Label>
           <Select>
@@ -148,7 +148,7 @@ const SubmitSighting = () => {
           </div>
         </div>
 
-        {/* Behavior */}
+        {/* Behavior (consult prof on more behavioural options) */}
         <div>
           <Label className="text-sm font-semibold mb-2 block">Observed Behavior</Label>
           <Select>
@@ -163,7 +163,7 @@ const SubmitSighting = () => {
           </Select>
         </div>
 
-        {/* Size */}
+        {/* Size (remove later on once ML functionality is implemented) */}
         <div>
           <Label className="text-sm font-semibold mb-2 block">Estimated Size (carapace length)</Label>
           <Input placeholder="e.g. 70cm" />
@@ -181,7 +181,7 @@ const SubmitSighting = () => {
         {/* Your Name */}
         <div>
           <Label className="text-sm font-semibold mb-2 block">Your Name</Label>
-          <Input placeholder="How should we credit you?" />
+          <Input placeholder="What would you like to be credited as?" />
         </div>
 
         <Button type="submit" size="lg" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
