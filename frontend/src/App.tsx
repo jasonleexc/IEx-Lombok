@@ -10,16 +10,14 @@ import About from "./pages/About";
 import SpeciesGuide from "./pages/SpeciesGuide";
 import ConservationTips from "./pages/ConservationTips";
 import Regions from "./pages/Regions";
-import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// for route-based navigation between pages 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider> 
-      <Toaster /> 
+    <TooltipProvider>
+      <Toaster />
       <Sonner />
       <BrowserRouter>
         <Layout>
@@ -30,7 +28,6 @@ const App = () => (
             <Route path="/species" element={<SpeciesGuide />} />
             <Route path="/tips" element={<ConservationTips />} />
             <Route path="/regions" element={<Regions />} />
-            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

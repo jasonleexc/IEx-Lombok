@@ -5,11 +5,6 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  env: {
-    // Load environment variables from .env file
-    VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL,
-    VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY
-  },
   server: {
     host: "0.0.0.0",
     port: 3000,
