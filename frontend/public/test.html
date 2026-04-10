@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supabase Test</title>
+</head>
+<body>
+    <h1>Supabase Connection Test</h1>
+    <div id="output"></div>
+    
+    <script type="module">
+        import { supabase } from './supabase.js';
+        
+        console.log('Testing Supabase connection...');
+        console.log('Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
+        console.log('Supabase Key exists:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
+        
+        try {
+            const { data, error } = await supabase
+                .from('species')
+                .select('name')
+                .limit(1);
+            
+            if (error) {
+                document.getElementById('output').innerHTML = `
+                    <h3 style="color: red;">❌ Supabase Error</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Details:</strong> ${JSON.stringify(error, null, 2)}</p>
+                `;
+            } else {
+                document.getElementById('output').innerHTML = `
+                    <h3 style="color: green;">✅ Supabase Connected!</h3>
+                    <p><strong>Success!</strong> Connected to Supabase successfully</p>
+                    <p><strong>Sample Data:</strong> ${JSON.stringify(data, null, 2)}</p>
+                `;
+            }
+        } catch (err) {
+            document.getElementById('output').innerHTML = `
+                <h3 style="color: red;">❌ Connection Error</h3>
+                <p><strong>Error:</strong> ${err.message}</p>
+            `;
+        }
+    </script>
+</body>
+</html>

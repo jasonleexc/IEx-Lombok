@@ -3,9 +3,51 @@ import { Plus, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SightingCard from "@/components/SightingCard";
 import heroImage from "@/assets/hero-turtle.jpg";
-import { mockSightings, stats } from "@/data/mockSightingData";
+import { dataService } from "@/services/dataService";
+import { useState, useEffect } from "react";
+import type { SightingMock, StatItem } from "@/services/dataService";
 
 const Index = () => {
+  const [sightings, setSightings] = useState<SightingMock[]>([]);
+  const [stats, setStats] = useState<StatItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [sightingsData, statsData] = await Promise.all([
+          dataService.getSightings(),
+          dataService.getStats()
+        ]);
+        setSightings(sightingsData);
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Create icon mapping for stats
+  const statsWithIcons = stats.map((stat, index) => ({
+    ...stat,
+    icon: index === 0 ? MapPin : index === 1 ? Plus : MapPin
+  }));
+
   return (
     <div>
       {/* Hero Section */}
@@ -49,7 +91,7 @@ const Index = () => {
       <section className="bg-card border-b border-border">
         <div className="container py-6">
           <div className="grid grid-cols-3 gap-4">
-            {stats.map((stat) => (
+            {statsWithIcons.map((stat, index) => (
               <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <stat.icon className="h-4 w-4 text-primary" />
@@ -78,8 +120,8 @@ const Index = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {mockSightings.map((sighting, i) => (
-            <div key={i} className="animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
+          {sightings.map((sighting, i) => (
+            <div key={sighting.id} className="animate-fade-in" style={{ animationDelay: `${i * 0.1}s` }}>
               <SightingCard {...sighting} />
             </div>
           ))}

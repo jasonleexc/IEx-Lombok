@@ -10,6 +10,7 @@ import About from "./pages/About";
 import SpeciesGuide from "./pages/SpeciesGuide";
 import ConservationTips from "./pages/ConservationTips";
 import Regions from "./pages/Regions";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,7 +19,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider> 
-      <Toaster /> // for toast notifications using sonner
+      <Toaster /> 
       <Sonner />
       <BrowserRouter>
         <Layout>
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/species" element={<SpeciesGuide />} />
             <Route path="/tips" element={<ConservationTips />} />
             <Route path="/regions" element={<Regions />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

@@ -1,12 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, ChevronRight, Waves, Fish, Anchor, TreePalm } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { regions, type RegionInfo } from "@/data/regionsData";
+import { dataService } from "@/services/dataService";
+import type { RegionInfo } from "@/services/dataService";
 
 const Regions = () => {
-  const [selectedRegion, setSelectedRegion] = useState<RegionInfo>(regions[0]);
+  const [regions, setRegions] = useState<RegionInfo[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<RegionInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const regionsData = await dataService.getRegions();
+        setRegions(regionsData);
+        if (regionsData.length > 0) {
+          setSelectedRegion(regionsData[0]);
+        }
+      } catch (error) {
+        console.error('Error loading regions data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading || !selectedRegion) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading regions data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-10">

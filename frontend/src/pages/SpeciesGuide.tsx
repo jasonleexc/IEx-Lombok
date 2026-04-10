@@ -1,5 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import { speciesData, type SpeciesInfo } from "@/data/speciesData";
+import { dataService } from "@/services/dataService";
+import { useState, useEffect } from "react";
+import type { SpeciesInfo } from "@/services/dataService";
 
 const statusColor = (status: SpeciesInfo["status"]) => {
   switch (status) {
@@ -11,6 +13,35 @@ const statusColor = (status: SpeciesInfo["status"]) => {
 };
 
 const SpeciesGuide = () => {
+  const [species, setSpecies] = useState<SpeciesInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const speciesData = await dataService.getSpecies();
+        setSpecies(speciesData);
+      } catch (error) {
+        console.error('Error loading species data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading species data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container py-10">
       <div className="max-w-3xl mb-10">
@@ -21,7 +52,7 @@ const SpeciesGuide = () => {
       </div>
 
       <div className="space-y-8">
-        {speciesData.map((sp, i) => (
+        {species.map((sp, i) => (
           <article
             key={sp.name}
             className="bg-card rounded-lg border border-border overflow-hidden animate-fade-in"

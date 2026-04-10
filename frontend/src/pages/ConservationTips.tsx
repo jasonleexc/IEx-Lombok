@@ -1,6 +1,59 @@
-import { conservationActions, emergencyContacts, interactionGuidelines } from "@/data/conservationTipsData";
+import React from "react";
+import { dataService } from "@/services/dataService";
+import { useState, useEffect } from "react";
+import type { ConservationTipItem, EmergencyContact } from "@/services/dataService";
+import { Eye, HandHeart, Camera, Waves, Trash2, Lightbulb, TreePalm, ShieldAlert } from "lucide-react";
+
+// Icon mapping for conservation tips
+const iconMap: Record<string, any> = {
+  Eye,
+  HandHeart,
+  Camera,
+  Waves,
+  Trash2,
+  Lightbulb,
+  TreePalm,
+  ShieldAlert
+};
 
 const ConservationTips = () => {
+  const [tips, setTips] = useState<{ interaction_guidelines: ConservationTipItem[], conservation_actions: ConservationTipItem[] }>({
+    interaction_guidelines: [],
+    conservation_actions: []
+  });
+  const [emergencyContacts, setEmergencyContacts] = useState<EmergencyContact[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [tipsData, contactsData] = await Promise.all([
+          dataService.getConservationTips(),
+          dataService.getEmergencyContacts()
+        ]);
+        setTips(tipsData);
+        setEmergencyContacts(contactsData);
+      } catch (error) {
+        console.error('Error loading conservation data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-muted-foreground">Loading conservation tips...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container py-10">
       <div className="max-w-3xl mb-12">
@@ -15,10 +68,10 @@ const ConservationTips = () => {
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">How to Interact Responsibly</h2>
         <p className="text-muted-foreground mb-8">Follow these guidelines to ensure your encounters are safe for both you and the turtles.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {interactionGuidelines.map((item) => (
+          {tips.interaction_guidelines.map((item) => (
             <div key={item.title} className="bg-card rounded-lg border border-border p-6 flex gap-4">
               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <item.icon className="h-5 w-5 text-primary" />
+                {iconMap[item.icon] ? React.createElement(iconMap[item.icon], { className: "h-5 w-5 text-primary" }) : <div className="h-5 w-5 text-primary" />}
               </div>
               <div>
                 <h3 className="font-display font-semibold text-foreground mb-1">{item.title}</h3>
@@ -34,10 +87,10 @@ const ConservationTips = () => {
         <h2 className="font-display text-2xl font-bold text-foreground mb-2">How You Can Help</h2>
         <p className="text-muted-foreground mb-8">Everyday actions that make a real difference for sea turtle survival.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {conservationActions.map((item) => (
+          {tips.conservation_actions.map((item) => (
             <div key={item.title} className="bg-card rounded-lg border border-border p-6 flex gap-4">
               <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <item.icon className="h-5 w-5 text-accent" />
+                {iconMap[item.icon] ? React.createElement(iconMap[item.icon], { className: "h-5 w-5 text-accent" }) : <div className="h-5 w-5 text-accent" />}
               </div>
               <div>
                 <h3 className="font-display font-semibold text-foreground mb-1">{item.title}</h3>
