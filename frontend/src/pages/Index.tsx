@@ -1,73 +1,8 @@
 import { Link } from "react-router-dom";
-import { Plus, TrendingUp, Users, Eye, MapPin } from "lucide-react";
+import { Plus, TrendingUp, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SightingCard from "@/components/SightingCard";
-import heroImage from "@/assets/hero-turtle.jpg";
-import turtle1 from "@/assets/turtle-1.jpg";
-import turtle2 from "@/assets/turtle-2.jpg";
-import turtle3 from "@/assets/turtle-3.jpg";
-import turtle4 from "@/assets/turtle-4.jpg";
-
-const mockSightings = [
-  {
-    author: "Wayan Surya",
-    avatar: "WS",
-    image: turtle1,
-    species: "Hawksbill Turtle",
-    location: "Gili Trawangan, Lombok",
-    date: "April 5, 2026",
-    description: "Spotted this beautiful hawksbill feeding on sponges near the famous turtle point dive site! She was very calm and let us observe from about 4 meters. The reef here is thriving.",
-    likes: 142,
-    comments: 23,
-    size: "~70cm carapace",
-    behavior: "Feeding on sponges",
-  },
-  {
-    author: "Ayu Lestari",
-    avatar: "AL",
-    image: turtle3,
-    species: "Green Sea Turtle",
-    location: "Gili Meno, Lombok",
-    date: "April 3, 2026",
-    description: "Green turtle grazing on seagrass in the shallow waters of Gili Meno. This area is such an important feeding ground — we counted 4 turtles in just one snorkel session!",
-    likes: 189,
-    comments: 31,
-    size: "~90cm carapace",
-    behavior: "Grazing on seagrass",
-  },
-  {
-    author: "James Okafor",
-    avatar: "JO",
-    image: turtle2,
-    species: "Olive Ridley",
-    location: "Kuta Beach, South Lombok",
-    date: "March 30, 2026",
-    description: "Witnessed an arriving female at sunset during the nesting season on the pristine beaches of South Lombok. The local conservation team was monitoring the area. Truly humbling.",
-    likes: 231,
-    comments: 47,
-    size: "~65cm carapace",
-    behavior: "Nesting",
-  },
-  {
-    author: "Sophie Chen",
-    avatar: "SC",
-    image: turtle4,
-    species: "Green Turtle Hatchlings",
-    location: "Belongas Bay, Lombok",
-    date: "March 27, 2026",
-    description: "Magical hatchling release organized by the local turtle conservation center! Over 50 baby green turtles made their way to the ocean at dawn. The community effort here is incredible.",
-    likes: 412,
-    comments: 89,
-    size: "~5cm each",
-    behavior: "Hatching & ocean entry",
-  },
-];
-
-const stats = [
-  { icon: Eye, value: "12,847", label: "Total Sightings" },
-  { icon: Users, value: "3,291", label: "Contributors" },
-  { icon: MapPin, value: "Lombok", label: "Featured Region" },
-];
+import { homeHero, homeStats, mockSightings } from "@/data/indexData";
 
 const Index = () => {
   return (
@@ -75,8 +10,8 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[400px] overflow-hidden">
         <img
-          src={heroImage}
-          alt="Sea turtle swimming through coral reef"
+          src={homeHero.image}
+          alt={homeHero.alt}
           className="absolute inset-0 w-full h-full object-cover"
           width={1920}
           height={1080}
@@ -84,10 +19,10 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-ocean-deep via-ocean-deep/50 to-transparent" />
         <div className="relative h-full container flex flex-col justify-end pb-12">
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-4 max-w-2xl">
-            Every Sighting Tells a Story
+            {homeHero.title}
           </h1>
           <p className="text-primary-foreground/80 text-lg md:text-xl max-w-xl mb-6">
-            Join our community tracking and protecting sea turtles — starting from the waters of Lombok, Indonesia.
+            {homeHero.description}
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
@@ -113,7 +48,7 @@ const Index = () => {
       <section className="bg-card border-b border-border">
         <div className="container py-6">
           <div className="grid grid-cols-3 gap-4">
-            {stats.map((stat) => (
+            {homeStats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-1">
                   <stat.icon className="h-4 w-4 text-primary" />
